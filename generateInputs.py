@@ -1,5 +1,5 @@
 import os
-from fetchData import download_raster_data, DownloadConfig
+from fetchData import download_raster_data, create_output_dir, DownloadConfig
 from fetchData.csv_utils import load_coordinates_from_csv
 
 def main():
@@ -16,7 +16,6 @@ def main():
         side_length_km=50,
         include_roughness_map=True,
         save_raw_files=True,  # Enable for debugging
-        out_dir=download_folder,
         verbose=True,
         show_plots=False
     )
@@ -29,11 +28,18 @@ def main():
     results = []
     for i, (lat, lon) in enumerate(coordinates):
         try:
-            # Only pass dynamic variables!
+            #Save folder for each location
+            download_path = create_output_dir(lat, lon, i, download_folder)
+            if download_path is None:
+                print(f"✓ Terrain already exists! Skipping index {(i+1):04d} ( Lat:{lat:.3f}, Lon:{lon:.3f})")
+                results.append((i, None, None))
+                continue
+
             dem_file, roughness_file = download_raster_data(
                 lat=lat,
                 lon=lon,
                 index=i,
+                out_dir=download_path,
                 config=config
             )
             

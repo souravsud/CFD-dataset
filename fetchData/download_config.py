@@ -11,14 +11,7 @@ class DownloadConfig:
     side_length_km: float = 50.0
     include_roughness_map: bool = False
     
-    # Paths
-    out_dir: str = "Data/downloads"
-    
     # Debug options
     verbose: bool = True
     show_plots: bool = False
     save_raw_files: bool = True
-    
-    def __post_init__(self):
-        """Create output directory"""
-        Path(self.out_dir).mkdir(exist_ok=True, parents=True)

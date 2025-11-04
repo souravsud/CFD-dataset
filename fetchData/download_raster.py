@@ -12,6 +12,7 @@ import geopandas as gpd
 from shapely.geometry import Polygon
 import windkit as wk
 import numpy as np
+import os
 
 from .reproject_raster import save_utm_metadata, reproject_raster_to_utm, get_utm_crs
 
@@ -28,7 +29,7 @@ class DEMDownloader:
         if self.config.verbose:
             print(message)
     
-    def download_single_location(self, lat, lon, index):
+    def download_single_location(self, lat, lon, index, out_dir):
         """Download DEM for a single coordinate pair"""
         self.log(f"Downloading DEM for lat={lat}, lon={lon}")
         
@@ -41,7 +42,7 @@ class DEMDownloader:
             dem_name=self.config.dem_name,
             dst_ellipsoidal_height=self.config.dst_ellipsoidal_height,
             dst_area_or_point=self.config.dst_area_or_point,
-            out_dir=self.config.out_dir,
+            out_dir=out_dir,
             verbose=self.config.verbose,
             show_plot=self.config.show_plots,
             save_raw=self.config.save_raw_files
@@ -66,6 +67,19 @@ def format_coord(value: float, is_lat: bool, precision: int = 5) -> str:
     frac_str = f"{frac_int:0{precision}d}"
 
     return f"{hemi}{deg_str}_{frac_str}"
+
+def create_output_dir(lat: float, lon: float, index: int, root_folder: str) -> str:
+    #Save folder for each location
+    lat_str = format_coord(lat, is_lat=True, precision=3)
+    lon_str = format_coord(lon, is_lat=False, precision=3)
+    folder_name = f"terrain_{(index+1):04d}_{lat_str}_{lon_str}"
+    download_path = os.path.join(root_folder, folder_name)
+    
+    if os.path.exists(download_path):
+        return None
+    else:
+        os.makedirs(download_path)
+        return download_path
 
 def latlon_offset(lat: float, lon: float, dy_m: float, dx_m: float) -> tuple[float, float]:
     """Move a point northwards by dy_m meters and eastwards by dx_m meters."""
