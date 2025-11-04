@@ -1,14 +1,25 @@
 import os
-import csv
-from fetchData import download_dem
+from fetchData import download_raster_data, DownloadConfig
 from fetchData.csv_utils import load_coordinates_from_csv
-from fetchData.download_raster import format_coord
 
 def main():
     root_folder = os.path.dirname(os.path.abspath(__file__))
     csv_path = os.path.join(root_folder, "coords.csv")
     data_folder = os.path.join(root_folder, "Data")
     download_folder = os.path.join(data_folder, "downloads")
+    
+    # Configure download settings ONCE
+    config = DownloadConfig(
+        dem_name="glo_30",
+        dst_ellipsoidal_height=False,
+        dst_area_or_point="Point",
+        side_length_km=50,
+        include_roughness_map=True,
+        save_raw_files=True,  # Enable for debugging
+        out_dir=download_folder,
+        verbose=True,
+        show_plots=False
+    )
     
     # Read CSV
     coordinates = load_coordinates_from_csv(csv_path, verbose=True)
@@ -18,19 +29,12 @@ def main():
     results = []
     for i, (lat, lon) in enumerate(coordinates):
         try:
-            # Returns tuple: (dem_file, roughness_file_or_None)
-            dem_file, roughness_file = download_dem(
+            # Only pass dynamic variables!
+            dem_file, roughness_file = download_raster_data(
                 lat=lat,
                 lon=lon,
                 index=i,
-                dem_name="glo_30",
-                dst_ellipsoidal_height=False,
-                dst_area_or_point="Point", 
-                side_length_km=50,
-                include_roughness_map=True,
-                out_dir=download_folder,
-                verbose=True,
-                show_plots=False
+                config=config
             )
             
             print(f"✓ DEM downloaded: {dem_file}")

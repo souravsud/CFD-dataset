@@ -4,7 +4,6 @@ from pathlib import Path
 import rasterio
 from rasterio import plot
 from rasterio.merge import merge
-from rasterio.transform import array_bounds
 import matplotlib.pyplot as plt
 from dem_stitcher.stitcher import stitch_dem
 import requests
@@ -13,10 +12,8 @@ import geopandas as gpd
 from shapely.geometry import Polygon
 import windkit as wk
 import numpy as np
-from pyproj import Transformer
-from rasterio.crs import CRS
 
-from .reproject_raster import save_metadata_json, reproject_raster_to_utm, get_utm_crs
+from .reproject_raster import save_utm_metadata, reproject_raster_to_utm, get_utm_crs
 
 R = 6_371_000.0  # Earth's mean radius in meters
 
@@ -216,23 +213,8 @@ def download_square_data(
     
     print(f"Saved terrain elevation map (UTM) to: {dem_out_file.resolve()}")
     
-    # Calculate UTM center and bounds for metadata
-    transformer = Transformer.from_crs(CRS.from_epsg(4326), utm_crs, always_xy=True)
-    center_utm_x, center_utm_y = transformer.transform(center_lon, center_lat)
-    
-    bounds_utm = array_bounds(profile_utm['height'], profile_utm['width'], profile_utm['transform'])
-    resolution_m = profile_utm['transform'].a
-    
     # Save metadata
-    save_metadata_json(
-        dem_out_file,
-        center_lat,
-        center_lon,
-        utm_crs,
-        (center_utm_x, center_utm_y),
-        bounds_utm,
-        resolution_m
-    )
+    save_utm_metadata(dem_out_file, center_lat, center_lon, profile_utm)
     
     if show_plot:
         _plot_map(data_utm, profile_utm, side_km, "Terrain")
@@ -299,15 +281,7 @@ def download_square_data(
         print(f"Saved roughness map (UTM) to: {rmap_out_file.resolve()}")
         
         # Save metadata for roughness map
-        save_metadata_json(
-            rmap_out_file,
-            center_lat,
-            center_lon,
-            utm_crs,
-            (center_utm_x, center_utm_y),
-            bounds_utm,
-            profile_z0_utm['transform'].a
-        )
+        save_utm_metadata(rmap_out_file, center_lat, center_lon, profile_z0_utm)
         
         if show_plot:
             _plot_map(z0_data_utm, profile_z0_utm, side_km, "Roughness")

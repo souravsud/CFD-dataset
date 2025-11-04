@@ -1,6 +1,7 @@
 from rasterio.warp import calculate_default_transform, reproject, Resampling
 from rasterio.crs import CRS
 from rasterio.transform import array_bounds
+from pyproj import Transformer
 import json
 from pathlib import Path
 import numpy as np
@@ -63,19 +64,41 @@ def reproject_raster_to_utm(data: np.ndarray, profile: dict, utm_crs: CRS, verbo
     
     return reprojected_data, utm_profile
 
-def save_metadata_json(
+def save_utm_metadata(
     output_file: Path,
     center_lat: float,
     center_lon: float,
-    utm_crs: CRS,
-    center_utm: tuple,
-    bounds_utm: tuple,
-    resolution_m: float
+    profile_utm: dict
 ):
-    """Save metadata JSON alongside the GeoTIFF"""
+    """
+    Calculate UTM metadata from reprojected profile and save to JSON
+    
+    Args:
+        output_file: Path to the output GeoTIFF file
+        center_lat: Original center latitude
+        center_lon: Original center longitude
+        profile_utm: Rasterio profile dict from reprojected raster
+    """
+    utm_crs = profile_utm['crs']
+    
+    # Calculate center coordinates in UTM
+    transformer = Transformer.from_crs(CRS.from_epsg(4326), utm_crs, always_xy=True)
+    center_utm_x, center_utm_y = transformer.transform(center_lon, center_lat)
+    
+    # Get bounds in UTM
+    bounds_utm = array_bounds(
+        profile_utm['height'], 
+        profile_utm['width'], 
+        profile_utm['transform']
+    )
+    
+    # Get resolution in meters
+    resolution_m = profile_utm['transform'].a
+    
+    # Prepare metadata
     metadata = {
         "center_latlon": [center_lat, center_lon],
-        "center_utm": list(center_utm),
+        "center_utm": [center_utm_x, center_utm_y],
         "utm_zone": utm_crs.to_string(),
         "epsg": utm_crs.to_epsg(),
         "bounds_utm": list(bounds_utm),
@@ -83,6 +106,7 @@ def save_metadata_json(
         "crs": "UTM"
     }
     
+    # Save to JSON
     metadata_file = output_file.with_suffix('.json')
     with open(metadata_file, 'w') as f:
         json.dump(metadata, f, indent=2)
