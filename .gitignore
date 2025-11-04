@@ -1,0 +1,20 @@
+# Operating System Files
+.DS_Store
+Thumbs.db
+
+# Python Artifacts
+__pycache__/
+*.pyc
+
+# Environment/Virtual Environments
+venv/
+.venv/
+.env
+
+# Common Logs and Data
+*.log
+*.temp
+
+Data/
+*.vtk
+*.dat
