@@ -1,0 +1,3 @@
+[submodule "terrain_following_mesh_generator"]
+	path = terrain_following_mesh_generator
+	url = git@github.com:souravsud/terrain_following_mesh_generator.git
