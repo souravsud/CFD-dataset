@@ -16,5 +16,6 @@ venv/
 *.temp
 
 Data/
+Data_test/
 *.vtk
 *.dat

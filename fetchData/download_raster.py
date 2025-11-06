@@ -153,7 +153,7 @@ def _generate_filename(index,center_lat, center_lon,out_dir,side_km, source, pre
     
     return out_file
         
-def _plot_map(data, profile, side_km, plot_name):
+def _plot_map(data, profile, side_km, plot_name,out_dir):
     
     print(f"Plotting {plot_name} map")
     fig, ax = plt.subplots(figsize=(6, 6))
@@ -163,9 +163,13 @@ def _plot_map(data, profile, side_km, plot_name):
         cmap = "tab20"
     plot.show(data, transform=profile["transform"], ax=ax, cmap=cmap)
     ax.set_title(f"{plot_name} {side_km}km square")
-    ax.set_xlabel("Longitude")
-    ax.set_ylabel("Latitude")
-    plt.show()
+    ax.set_xlabel("Eastings (m)")
+    ax.set_ylabel("Northings (m)")
+    
+    out_dir = Path(out_dir)
+    filename = f"{plot_name.lower().replace(' ', '_')}_map.png" # Optional: Replace spaces with underscores
+    filepath = out_dir / filename
+    plt.savefig(filepath)
     
 def download_square_data(
         index: int,
@@ -231,7 +235,7 @@ def download_square_data(
     save_utm_metadata(dem_out_file, center_lat, center_lon, profile_utm)
     
     if show_plot:
-        _plot_map(data_utm, profile_utm, side_km, "Terrain")
+        _plot_map(data_utm, profile_utm, side_km, "Terrain", out_dir)
     
     # ===== ROUGHNESS MAP PROCESSING =====
     if include_roughness_map:
@@ -298,7 +302,7 @@ def download_square_data(
         save_utm_metadata(rmap_out_file, center_lat, center_lon, profile_z0_utm)
         
         if show_plot:
-            _plot_map(z0_data_utm, profile_z0_utm, side_km, "Roughness")
+            _plot_map(z0_data_utm, profile_z0_utm, side_km, "Roughness", out_dir)
     
     return str(dem_out_file.resolve()), str(rmap_out_file.resolve()) if include_roughness_map else None
     

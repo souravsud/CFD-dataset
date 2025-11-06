@@ -1,24 +1,27 @@
 import os
 from fetchData import download_raster_data, create_output_dir, DownloadConfig
 from fetchData.csv_utils import load_coordinates_from_csv
+from fetchData.parameter_generation import generate_directions
+from terrain_following_mesh_generator import terrain_mesh as tm
 
 def main():
+    SECTORS = 16
+    
     root_folder = os.path.dirname(os.path.abspath(__file__))
     csv_path = os.path.join(root_folder, "coords.csv")
-    data_folder = os.path.join(root_folder, "Data")
+    data_folder = os.path.join(root_folder, "Data_test")
     download_folder = os.path.join(data_folder, "downloads")
     
     # Configure download settings ONCE
-    config = DownloadConfig(
-        dem_name="glo_30",
-        dst_ellipsoidal_height=False,
-        dst_area_or_point="Point",
-        side_length_km=50,
-        include_roughness_map=True,
-        save_raw_files=True,  # Enable for debugging
-        verbose=True,
-        show_plots=False
-    )
+    download_config = DownloadConfig(
+                                        side_length_km=50,
+                                        include_roughness_map=True,
+                                        save_raw_files=True,
+                                        verbose=True,
+                                        show_plots=True
+                                    )
+    mesh_config = tm.load_config("terrain_config.yaml")
+    terrain_mesh_pipeline = tm.TerrainMeshPipeline()
     
     # Read CSV
     coordinates = load_coordinates_from_csv(csv_path, verbose=True)
@@ -36,22 +39,41 @@ def main():
                 continue
 
             dem_file, roughness_file = download_raster_data(
-                lat=lat,
-                lon=lon,
-                index=i,
-                out_dir=download_path,
-                config=config
-            )
+                                                            lat=lat,
+                                                            lon=lon,
+                                                            index=i,
+                                                            out_dir=download_path,
+                                                            config=download_config
+                                                        )
             
             print(f"✓ DEM downloaded: {dem_file}")
             if roughness_file:
                 print(f"✓ Roughness map downloaded: {roughness_file}")
             
-            results.append((i, dem_file, roughness_file))
+            #processing and mesh generation code goes here
+            
+            #directions = generate_directions(SECTORS)
+            directions = [45]
+            for direction in directions:
+                mesh_config["terrain_config"].rotation_deg = direction
+                
+                subdir = f"rotatedTerrain_{direction:03d}_deg"
+                path = os.path.join(download_path, subdir)
+                os.makedirs(path, exist_ok=True)
+
+                print(mesh_config["terrain_config"].rotation_deg)
+                terrain_iterations = terrain_mesh_pipeline.run(
+                                                    dem_path=dem_file,
+                                                    rmap_path=roughness_file,
+                                                    output_dir=path,
+                                                    **mesh_config
+                                                )
+            
+            results.append((i, dem_file, roughness_file,terrain_iterations))
             
         except Exception as e:
             print(f"✗ Failed row {i}: {e}")
-            results.append((i, None, None))
+            results.append((i, None, None, None))
     
     successful = len([r for r in results if r[1] is not None])
     print(f"\nPipeline completed! Downloaded {successful}/{len(coordinates)} locations successfully.") 
