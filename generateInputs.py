@@ -1,5 +1,6 @@
 import os
 from fetchData import download_raster_data, create_output_dir, DownloadConfig
+from inlet_profile_generator import generate_inlet_data_workflow, ABLConfig
 from fetchData.csv_utils import load_coordinates_from_csv
 from fetchData.parameter_generation import generate_directions
 from terrain_following_mesh_generator import terrain_mesh as tm
@@ -21,6 +22,7 @@ def main():
                                         show_plots=True
                                     )
     mesh_config = tm.load_config("terrain_config.yaml")
+    inletBC_config = ABLConfig()
     terrain_mesh_pipeline = tm.TerrainMeshPipeline()
     
     # Read CSV
@@ -50,24 +52,23 @@ def main():
             if roughness_file:
                 print(f"✓ Roughness map downloaded: {roughness_file}")
             
-            #processing and mesh generation code goes here
-            
-            #directions = generate_directions(SECTORS)
-            directions = [45]
+            #processing and mesh generation
+            directions = generate_directions(SECTORS)
             for direction in directions:
                 mesh_config["terrain_config"].rotation_deg = direction
+                inletBC_config.flow_dir_deg = direction
                 
                 subdir = f"rotatedTerrain_{direction:03d}_deg"
                 path = os.path.join(download_path, subdir)
                 os.makedirs(path, exist_ok=True)
 
-                print(mesh_config["terrain_config"].rotation_deg)
                 terrain_iterations = terrain_mesh_pipeline.run(
                                                     dem_path=dem_file,
                                                     rmap_path=roughness_file,
                                                     output_dir=path,
                                                     **mesh_config
                                                 )
+                profiles = generate_inlet_data_workflow(path , inletBC_config)
             
             results.append((i, dem_file, roughness_file,terrain_iterations))
             
