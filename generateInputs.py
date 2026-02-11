@@ -1,6 +1,6 @@
 import os
 from fetchData import download_raster_data, create_output_dir, DownloadConfig
-from inlet_profile_generator import generate_inlet_data_workflow, ABLConfig
+from ABL_BC_generator.generateBCs import generate_inlet_data_workflow, ABLConfig
 from fetchData.csv_utils import load_coordinates_from_csv
 from fetchData.parameter_generation import generate_directions
 from terrain_following_mesh_generator import terrain_mesh as tm

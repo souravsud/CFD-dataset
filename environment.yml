@@ -1,0 +1,20 @@
+name: sample_generator
+channels:
+  - conda-forge
+  - defaults
+dependencies:
+  - python=3.12
+  - dem_stitcher
+  - ipykernel
+  - numpy
+  - rasterio
+  - pyvista
+  - matplotlib
+  - pyproj
+  - scipy
+  - yaml
+  - pyyaml
+  - pip
+  - pip:
+    - windkit==1.0.2
+prefix: /Users/ssudhakaran/miniconda3/envs/sample_generator

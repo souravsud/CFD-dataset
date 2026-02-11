@@ -146,7 +146,7 @@ def _generate_filename(index,center_lat, center_lon,out_dir,side_km, source, pre
     out_path.mkdir(exist_ok=True, parents=True)
     lat_str = format_coord(center_lat, is_lat=True, precision=3)
     lon_str = format_coord(center_lon, is_lat=False, precision=3)
-    side_str = f"{int(side_km)}km" if side_km.is_integer() else f"{side_km:.1f}km"
+    side_str = f"{side_km:.0f}km" if side_km % 1 == 0 else f"{side_km:.1f}km"
     file_name = f"{prefix}_{(index+1):04d}_{source}_{lat_str}_{lon_str}_{side_str}.tif"
     
     out_file = out_path / file_name
