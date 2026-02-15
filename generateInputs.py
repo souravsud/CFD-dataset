@@ -10,7 +10,7 @@ def main():
     
     root_folder = os.path.dirname(os.path.abspath(__file__))
     csv_path = os.path.join(root_folder, "coords.csv")
-    data_folder = os.path.join(root_folder, "Data_test")
+    data_folder = os.path.join(root_folder, "Data")
     download_folder = os.path.join(data_folder, "downloads")
     
     # Configure download settings ONCE

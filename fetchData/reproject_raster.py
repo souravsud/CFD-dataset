@@ -65,6 +65,7 @@ def reproject_raster_to_utm(data: np.ndarray, profile: dict, utm_crs: CRS, verbo
     return reprojected_data, utm_profile
 
 def save_utm_metadata(
+    source: str,
     output_file: Path,
     center_lat: float,
     center_lon: float,
@@ -97,6 +98,7 @@ def save_utm_metadata(
     
     # Prepare metadata
     metadata = {
+        "data source" : source,
         "center_latlon": [center_lat, center_lon],
         "center_utm": [center_utm_x, center_utm_y],
         "utm_zone": utm_crs.to_string(),

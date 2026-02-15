@@ -232,7 +232,7 @@ def download_square_data(
     print(f"Saved terrain elevation map (UTM) to: {dem_out_file.resolve()}")
     
     # Save metadata
-    save_utm_metadata(dem_out_file, center_lat, center_lon, profile_utm)
+    save_utm_metadata(dem_name, dem_out_file, center_lat, center_lon, profile_utm)
     
     if show_plot:
         _plot_map(data_utm, profile_utm, side_km, "Terrain", out_dir)
@@ -262,8 +262,10 @@ def download_square_data(
         # Download & stitch
         data_lc, profile_lc = stitch_tiles(tiles, version, year, bounds)
         
-        lct = wk.get_landcover_table("GWA4")
+        land_cover_table = "GWA4"
+        lct = wk.get_landcover_table(land_cover_table)
         
+        source = grid_url+ "," + version + "," + str(year) + ","+ land_cover_table
         if verbose: 
             print("Converting WorldCover classes to aerodynamic roughness length (z0)...")
         
@@ -299,7 +301,7 @@ def download_square_data(
         print(f"Saved roughness map (UTM) to: {rmap_out_file.resolve()}")
         
         # Save metadata for roughness map
-        save_utm_metadata(rmap_out_file, center_lat, center_lon, profile_z0_utm)
+        save_utm_metadata(source, rmap_out_file, center_lat, center_lon, profile_z0_utm)
         
         if show_plot:
             _plot_map(z0_data_utm, profile_z0_utm, side_km, "Roughness", out_dir)
