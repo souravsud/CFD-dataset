@@ -28,8 +28,6 @@ def main():
 
     results = []
     for i in range(row_count):
-        dem_file = None
-        stl_file = None
         try:
             # Download DEM tile
             dem_file = download_dem(
@@ -54,6 +52,7 @@ def main():
 
             if os.path.exists(folder_path):
                 print(f"Alert: Terrain already exists: {folder_name}")
+                results.append((i, dem_file, 'skipped'))
                 continue
                 
             os.makedirs(folder_path)
@@ -81,10 +80,13 @@ def main():
             
         except Exception as e:
             print(f"✗ Failed row {i}: {e}")
-            results.append((i, dem_file, None))
+            # Use local variable if defined, otherwise None
+            dem = locals().get('dem_file', None)
+            results.append((i, dem, None))
     
-    successful = len([r for r in results if r[2] is not None])
-    print(f"\nPipeline completed! Processed {successful} locations successfully.")
+    successful = len([r for r in results if r[2] is not None and r[2] != 'skipped'])
+    skipped = len([r for r in results if r[2] == 'skipped'])
+    print(f"\nPipeline completed! Processed {successful} locations successfully, skipped {skipped}.")
     
     return results
 
