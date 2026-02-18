@@ -41,7 +41,7 @@ def main():
                                 )
             print(f"✓ DEM downloaded: {dem_file}")
             
-            """ lat, lon = get_coordinate_by_index(csv_path, i, verbose=False)
+            lat, lon = get_coordinate_by_index(csv_path, i, verbose=False)
             lat_str = format_coord(lat, is_lat=True, precision=3)
             lon_str = format_coord(lon, is_lat=False, precision=3)
             folder_name = f"terrain_{(i+1):04d}_{lat_str}_{lon_str}"
@@ -74,7 +74,6 @@ def main():
                     print(f"✓ STL created: {stl_file}")
             
             results.append((i, dem_file, stl_file))
-            """
         except Exception as e:
             print(f"✗ Failed row {i}: {e}")
             results.append((i, None, None))
