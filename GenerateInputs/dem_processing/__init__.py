@@ -3,13 +3,9 @@ import os
 from .dem_processor import process_dem
 from .process_config import ProcessConfig
 from .randomDirections import generate_directions
-from .csv_utils import get_coordinate_by_index
 
 def process_dem_files(dem_file, csv_path, row_index, **kwargs):
     """Simple API for DEM processing - matches download API style"""
-    
-    # Get coordinates from CSV
-    #lat, lon = get_coordinate_by_index(csv_path, row_index, verbose=kwargs.get('verbose', False))
     
     # Create and configure processing config
     config = ProcessConfig(csv_path=csv_path, row_index=row_index, verbose=kwargs.get('verbose', True))
