@@ -19,3 +19,5 @@ Data/
 Data_test/
 *.vtk
 *.dat
+
+grid_independence_benchmark/
