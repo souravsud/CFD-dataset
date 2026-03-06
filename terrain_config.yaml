@@ -43,3 +43,10 @@ visualization:
   save_high_res: true
   plot_format: png
   dpi: 150
+
+# Tool versions recorded in pipeline_metadata.json.
+# Python version is detected automatically at runtime.
+# Specify the OpenFOAM version used to run the generated cases so that the
+# metadata is complete for FAIR data practices.
+tool_versions:
+  openfoam_version: "v12"
