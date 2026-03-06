@@ -1,5 +1,5 @@
 import os
-from fetchData import download_raster_data, create_output_dir, DownloadConfig
+from fetchData import download_raster_data, create_output_dir, DownloadConfig, enhance_pipeline_metadata
 from ABL_BC_generator.generateBCs import generate_inlet_data_workflow, ABLConfig
 from fetchData.csv_utils import load_coordinates_from_csv
 from fetchData.parameter_generation import generate_directions
@@ -22,6 +22,7 @@ def main():
                                         show_plots=True
                                     )
     mesh_config = tm.load_config("terrain_config.yaml")
+    terrain_config_path = os.path.join(root_folder, "terrain_config.yaml")
     inletBC_config = ABLConfig()
     terrain_mesh_pipeline = tm.TerrainMeshPipeline()
     
@@ -69,6 +70,13 @@ def main():
                                                     **mesh_config
                                                 )
                 profiles = generate_inlet_data_workflow(path , inletBC_config)
+                enhance_pipeline_metadata(
+                    case_dir=path,
+                    abl_config=inletBC_config,
+                    dem_file=dem_file,
+                    roughness_file=roughness_file,
+                    terrain_config_path=terrain_config_path,
+                )
             
             results.append((i, dem_file, roughness_file,terrain_iterations))
             
