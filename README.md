@@ -112,7 +112,7 @@ jupyter notebook input_generation_dashboard.ipynb
 For each coordinate and wind direction the pipeline:
 - Downloads a DEM and roughness raster (tile size and resolution controlled by `side_length_km` and `dem_source` in `terrain_config.yaml`)
 - Rotates and crops the terrain
-- Generates blockMesh and snappyHexMesh dictionaries
+- Generates terrain surface mesh and  blockMesh dictionary file
 - Creates ABL inlet boundary condition files
 - Writes a `pipeline_metadata.json` summary
 
@@ -124,7 +124,7 @@ jupyter notebook pipeline_dashboard.ipynb
 
 Steps covered in this notebook:
 1. Build OpenFOAM case directories from `pipeline_metadata.json` files
-2. Run local meshing using parallel Python workers (one process per case)
+2. Run local meshing (since blockMesh is a serial operation) using parallel Python workers (one process per case)
 3. Rsync cases to the HPC cluster
 4. Submit SLURM jobs and record status in `case_status.json`
 
@@ -145,7 +145,6 @@ Data/downloads/
     ├── terrain_0001_glo_30_*.json                           # Download metadata
     └── rotatedTerrain_000_deg/
         ├── blockMeshDict
-        ├── snappyHexMeshDict
         ├── pipeline_metadata.json
         └── [mesh and boundary-condition files]
 
@@ -163,7 +162,7 @@ Two notebooks are provided for validation and performance studies:
 
 | Notebook | Purpose |
 |----------|---------|
-| `parallelisation_benchmark.ipynb` | Strong-scaling study — fixed mesh, varying core count |
+| `parallelisation_benchmark.ipynb` | Scaling study — fixed mesh, varying core count |
 | `grid_independence_test.ipynb` | Mesh independence study — multiple resolutions to verify convergence |
 
 ## License
