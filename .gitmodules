@@ -1,9 +1,0 @@
-[submodule "terrain_following_mesh_generator"]
-	path = terrain_following_mesh_generator
-	url = https://github.com/souravsud/terrain_following_mesh_generator.git
-[submodule "ABL_BC_generator"]
-	path = ABL_BC_generator
-	url = https://github.com/souravsud/ABL_BC_generator.git
-[submodule "taskManager"]
-	path = taskManager
-	url = https://github.com/souravsud/taskManager.git

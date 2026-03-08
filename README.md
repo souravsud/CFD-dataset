@@ -23,9 +23,9 @@ CFD-dataset/
 ├── environment.yml                     # Conda environment specification
 │
 ├── fetchData/                          # Downloads DEMs and roughness rasters
-├── terrain_following_mesh_generator/   # Generates 3D terrain-following meshes (submodule)
-├── ABL_BC_generator/                   # Creates ABL inlet boundary conditions (submodule)
-├── taskManager/                        # Manages OpenFOAM cases and HPC submission (submodule)
+├── terrain_following_mesh_generator/   # Generates 3D terrain-following meshes (pip package)
+├── ABL_BC_generator/                   # Creates ABL inlet boundary conditions (pip package)
+├── taskManager/                        # Manages OpenFOAM cases and HPC submission (pip package)
 │
 ├── input_generation_dashboard.ipynb    # Interactive batch input generation
 ├── pipeline_dashboard.ipynb            # Case creation, meshing, and HPC submission
@@ -63,17 +63,21 @@ Key Python dependencies include:
 | `pyyaml` | YAML configuration parsing |
 | `windkit` | Wind resource calculations |
 
-### Submodules
+### Pipeline packages
 
-The three submodules (`ABL_BC_generator`, `terrain_following_mesh_generator`, `taskManager`) are
-custom code modules developed specifically for this pipeline. They are not published on PyPI or
-conda-forge and do not have Python packaging setup, so they cannot be listed as pip/conda
-dependencies. Git submodules are therefore the correct mechanism for including them.
+`ABL_BC_generator`, `terrain_following_mesh_generator`, and `taskManager` live inside this
+repository as self-contained, pip-installable Python packages (each has its own
+`pyproject.toml`). They are installed automatically when you run `conda env create -f
+environment.yml` — no extra `git submodule update` step is needed.
 
-Initialise all Git submodules after cloning:
+Each package can also be installed in isolation or published to PyPI:
 
 ```bash
-git submodule update --init --recursive
+# Install a package in editable mode for local development
+pip install -e ./ABL_BC_generator
+
+# Or install directly from GitHub
+pip install git+https://github.com/souravsud/ABL_BC_generator.git
 ```
 
 ## Usage

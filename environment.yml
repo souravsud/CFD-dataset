@@ -17,3 +17,15 @@ dependencies:
   - pip
   - pip:
     - windkit==1.0.2
+    - ./ABL_BC_generator
+    - ./terrain_following_mesh_generator
+    - ./taskManager
+    # Once published to PyPI / GitHub, replace the local paths above with:
+    # - ABL-BC-generator
+    # - terrain-following-mesh-generator
+    # - cfd-task-manager
+    # or pin to a specific git commit / tag, e.g.:
+    # - git+https://github.com/souravsud/ABL_BC_generator.git
+    # - git+https://github.com/souravsud/terrain_following_mesh_generator.git
+    # - git+https://github.com/souravsud/taskManager.git
+

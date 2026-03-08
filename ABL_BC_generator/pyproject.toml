@@ -1,0 +1,22 @@
+[build-system]
+requires = ["setuptools>=61", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "ABL-BC-generator"
+version = "1.0.0"
+description = "Atmospheric Boundary Layer inlet boundary condition generator for OpenFOAM"
+readme = "README.md"
+requires-python = ">=3.9"
+dependencies = [
+    "jinja2>=3.0,<4.0",
+    "matplotlib>=3.0",
+    "numpy>=1.20",
+]
+
+[tool.setuptools]
+packages = ["ABL_BC_generator"]
+package-dir = {"ABL_BC_generator" = "."}
+
+[tool.setuptools.package-data]
+ABL_BC_generator = ["BCtemplates/*"]
