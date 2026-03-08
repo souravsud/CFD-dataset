@@ -65,6 +65,11 @@ Key Python dependencies include:
 
 ### Submodules
 
+The three submodules (`ABL_BC_generator`, `terrain_following_mesh_generator`, `taskManager`) are
+custom code modules developed specifically for this pipeline. They are not published on PyPI or
+conda-forge and do not have Python packaging setup, so they cannot be listed as pip/conda
+dependencies. Git submodules are therefore the correct mechanism for including them.
+
 Initialise all Git submodules after cloning:
 
 ```bash

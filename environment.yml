@@ -1,4 +1,4 @@
-name: sample_generator
+name: cfd-dataset
 channels:
   - conda-forge
   - defaults
@@ -17,4 +17,3 @@ dependencies:
   - pip
   - pip:
     - windkit==1.0.2
-prefix: /Users/ssudhakaran/miniconda3/envs/sample_generator
