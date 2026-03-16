@@ -20,11 +20,11 @@ grid:
     
 mesh:
   domain_height: 5000.0
-  total_z_cells: 66
+  total_z_cells: 76
   terrain_normal_first_layer: true
   z_grading:
-    - [1.0, 1.0, 150]
-
+    - [0.04, 0.658, 1.0]
+    - [0.96, 0.342, 180.0]
 
 boundary:
   aoi_fraction: 0.3
