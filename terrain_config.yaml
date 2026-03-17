@@ -1,8 +1,8 @@
 terrain:
-  center_lat: None
-  center_lon: None
+  center_lat: null
+  center_lon: null
   crop_size_km: 30
-  rotation_deg: None
+  rotation_deg: null
   smoothing_sigma: 0
   center_coordinates: false
   
