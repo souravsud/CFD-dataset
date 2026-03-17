@@ -21,3 +21,4 @@ Data_test/
 *.dat
 
 grid_independence_benchmark/
+parallelisation_benchmark
