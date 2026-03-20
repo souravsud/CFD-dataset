@@ -1,9 +1,9 @@
 import os
 from fetchData import download_raster_data, create_output_dir, DownloadConfig
-from ABL_BC_generator.generateBCs import generate_inlet_data_workflow, ABLConfig
+from abl_bc_generator import generate_inlet_data_workflow, ABLConfig
 from fetchData.csv_utils import load_coordinates_from_csv
 from fetchData.parameter_generation import generate_directions
-from terrain_following_mesh_generator import terrain_mesh as tm
+import terrain_mesh as tm
 
 def main():
     SECTORS = 16
@@ -21,7 +21,7 @@ def main():
                                         verbose=True,
                                         show_plots=True
                                     )
-    mesh_config = tm.load_config("terrain_config.yaml")
+    mesh_config = tm.load_config(os.path.join(root_folder, "configs", "terrain_config.yaml"))
     inletBC_config = ABLConfig()
     terrain_mesh_pipeline = tm.TerrainMeshPipeline()
     

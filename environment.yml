@@ -12,9 +12,13 @@ dependencies:
   - matplotlib
   - pyproj
   - scipy
-  - yaml
   - pyyaml
   - pip
   - pip:
     - windkit==1.0.2
-prefix: /Users/ssudhakaran/miniconda3/envs/sample_generator
+    # Installs as 'terrain_mesh' (import terrain_mesh as tm)
+    - git+https://github.com/souravsud/terrain_following_mesh_generator.git
+    # Installs as 'abl_bc_generator' (from abl_bc_generator import ...)
+    - git+https://github.com/souravsud/ABL_BC_generator.git
+    # Installs as 'taskmanager' (from taskmanager import ...)
+    - git+https://github.com/souravsud/taskManager.git
