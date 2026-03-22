@@ -1,0 +1,21 @@
+#!/bin/bash
+#SBATCH --job-name={{ job_name }}
+#SBATCH --account={{ account }}
+#SBATCH --partition={{ partition }}
+#SBATCH --nodes={{ nodes }}
+#SBATCH --ntasks={{ ntasks }}
+#SBATCH --time={{ walltime }}
+{% if email_id %}
+#SBATCH --mail-type={{ email_type | default('END,FAIL') }}
+#SBATCH --mail-user={{ email_id }}
+{% endif %}
+
+
+module purge
+module load OpenFOAM/{{ openfoam_version }}
+
+cd $SLURM_SUBMIT_DIR
+source $FOAM_BASH
+
+chmod +x Allrun
+./Allrun

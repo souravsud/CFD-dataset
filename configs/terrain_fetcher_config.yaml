@@ -1,0 +1,16 @@
+# Terrain fetcher settings used by generateInputs.py and dashboard workflows.
+# Keys map to terrain_fetcher.load_config(...).
+
+dem_name: glo_30
+ellipsoidal_height: false
+area_or_point: Point
+side_km: 50.0
+
+roughness_map: true
+worldcover_version: v20
+worldcover_year: 2021
+land_cover_table: GWA4
+
+save_raw_files: true
+verbose: true
+show_plots: false
