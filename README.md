@@ -22,7 +22,7 @@ CFD-dataset/
 ├── generateInputs.py                   # Main orchestration script
 ├── environment.yml                     # Conda environment specification
 │
-├── fetchData/                          # Downloads DEMs and roughness rasters
+├── terrain-fetcher (external package)  # Downloads DEMs and roughness rasters
 ├── terrain_following_mesh_generator/   # Generates 3D terrain-following meshes (submodule)
 ├── ABL_BC_generator/                   # Creates ABL inlet boundary conditions (submodule)
 ├── taskManager/                        # Manages OpenFOAM cases and HPC submission (submodule)
@@ -50,6 +50,12 @@ Create and activate the conda environment:
 ```bash
 conda env create -f environment.yml
 conda activate cfd-dataset
+```
+
+Install `terrain-fetcher` from its separate repository before running input generation:
+
+```bash
+pip install git+https://github.com/souravsud/terrain-fetcher.git@main
 ```
 
 Key Python dependencies include:
@@ -95,6 +101,29 @@ Edit `terrain_config.yaml` to set domain and mesh parameters. Key settings:
 | `dem_source` | DEM dataset identifier | `glo_30` |
 | `side_length_km` | Download tile side length (km) | `50` |
 
+### 2b. Configure Terrain Fetching
+
+Edit `configs/terrain_fetcher_config.yaml` to control DEM/roughness download behavior.
+
+| Parameter | Description | Example |
+|-----------|-------------|---------|
+| `dem_name` | DEM dataset identifier | `glo_30` |
+| `side_km` | Download tile side length (km) | `50.0` |
+| `roughness_map` | Enable roughness map generation | `true` |
+| `worldcover_version` / `worldcover_year` | ESA WorldCover source selection | `v100` / `2020` |
+
+### 2c. Configure ABL Boundary Conditions
+
+Edit `configs/abl_bc_config.yaml` to control ABL inlet profile and OpenFOAM
+boundary-condition defaults used by `abl_bc_generator`.
+
+| Parameter group | Description |
+|-----------------|-------------|
+| `atmospheric` | Atmospheric state inputs (`u_star`, `z0`, `h_bl`, etc.) |
+| `turbulence` | Turbulence model constants (`Cmu`, `kappa`) |
+| `mesh` | Patch naming for inlet/outlet/ground/sky/sides |
+| `openfoam` | Wall functions and default boundary condition templates |
+
 ### 3. Generate Terrain Inputs
 
 **Option A — Script (single run):**
@@ -110,7 +139,7 @@ jupyter notebook input_generation_dashboard.ipynb
 ```
 
 For each coordinate and wind direction the pipeline:
-- Downloads a DEM and roughness raster (tile size and resolution controlled by `side_length_km` and `dem_source` in `terrain_config.yaml`)
+- Downloads a DEM and roughness raster (controlled by `configs/terrain_fetcher_config.yaml`)
 - Rotates and crops the terrain
 - Generates terrain surface mesh and  blockMesh dictionary file
 - Creates ABL inlet boundary condition files

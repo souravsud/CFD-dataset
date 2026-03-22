@@ -22,6 +22,7 @@ mesh:
   domain_height: 5000.0
   total_z_cells: 76
   terrain_normal_first_layer: true
+  adjust_ceiling_for_terrain: true
   z_grading:
     - [0.04, 0.658, 1.0]
     - [0.96, 0.342, 180.0]

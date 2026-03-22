@@ -16,6 +16,8 @@ dependencies:
   - pip
   - pip:
     - windkit==1.0.2
+    # Install terrain-fetcher from its separate repository (pin tag/commit for reproducibility)
+    - git+https://github.com/souravsud/terrain-fetcher.git@main
     # Installs as 'terrain_mesh' (import terrain_mesh as tm)
     - git+https://github.com/souravsud/terrain_following_mesh_generator.git
     # Installs as 'abl_bc_generator' (from abl_bc_generator import ...)
