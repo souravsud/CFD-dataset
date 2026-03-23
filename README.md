@@ -88,41 +88,9 @@ lat,lon
 39.71121111,-7.73483333
 ```
 
-### 2. Configure the Mesh
+### 2. Configurations
 
-Edit `terrain_config.yaml` to set domain and mesh parameters. Key settings:
-
-| Parameter | Description | Default |
-|-----------|-------------|---------|
-| `crop_size_km` | Terrain tile side length (km) | `30` |
-| `domain_height_m` | Vertical domain extent (m) | `5000` |
-| `grid.nx` / `grid.ny` | Horizontal mesh resolution | `361 × 361` |
-| `vertical_layers` | Number of vertical cell layers | `66` |
-| `dem_source` | DEM dataset identifier | `glo_30` |
-| `side_length_km` | Download tile side length (km) | `50` |
-
-### 2b. Configure Terrain Fetching
-
-Edit `configs/terrain_fetcher_config.yaml` to control DEM/roughness download behavior.
-
-| Parameter | Description | Example |
-|-----------|-------------|---------|
-| `dem_name` | DEM dataset identifier | `glo_30` |
-| `side_km` | Download tile side length (km) | `50.0` |
-| `roughness_map` | Enable roughness map generation | `true` |
-| `worldcover_version` / `worldcover_year` | ESA WorldCover source selection | `v100` / `2020` |
-
-### 2c. Configure ABL Boundary Conditions
-
-Edit `configs/abl_bc_config.yaml` to control ABL inlet profile and OpenFOAM
-boundary-condition defaults used by `abl_bc_generator`.
-
-| Parameter group | Description |
-|-----------------|-------------|
-| `atmospheric` | Atmospheric state inputs (`u_star`, `z0`, `h_bl`, etc.) |
-| `turbulence` | Turbulence model constants (`Cmu`, `kappa`) |
-| `mesh` | Patch naming for inlet/outlet/ground/sky/sides |
-| `openfoam` | Wall functions and default boundary condition templates |
+Edit `configs/terrain_config.yaml` to set domain and mesh parameters, `configs/terrain_fetcher_config.yaml` to control DEM/roughness map download behaviour, `configs/abl_bc_config.yaml` to control ABL inlet profile and OpenFOAM boundary-condition and `configs/taskmanager_config.yaml` to setup the job management in the HPC cluster. Refer to individual repos for more info.
 
 ### 3. Generate Terrain Inputs
 
