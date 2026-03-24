@@ -57,6 +57,7 @@ def main():
     csv_path = os.path.join(root_folder, "coords.csv")
     fetcher_config_path = os.path.join(root_folder, "configs", "terrain_fetcher_config.yaml")
     abl_config_path = os.path.join(root_folder, "configs", "abl_bc_config.yaml")
+    bc_template_dir = os.path.join(root_folder, "configs", "openfoam_template", "0")
     data_folder = os.path.join(root_folder, "Data")
     download_folder = os.path.join(data_folder, "downloads")
     
@@ -111,7 +112,7 @@ def main():
                                                     output_dir=path,
                                                     **mesh_config
                                                 )
-                profiles = generate_inlet_data_workflow(path , inletBC_config)
+                profiles = generate_inlet_data_workflow(path, inletBC_config, template_dir=bc_template_dir)
             
             results.append((i, dem_file, roughness_file,terrain_iterations))
             
