@@ -20,7 +20,7 @@ Edit the files in `configs/` to customise pipeline behaviour:
 | `configs/abl_bc_config.yaml` | ABL inlet profile and OpenFOAM boundary conditions |
 | `configs/taskmanager_config.yaml` | Job management on the HPC cluster |
 
-Refer to the individual submodule repositories for detailed parameter descriptions.
+Refer to the individual package repositories for detailed parameter descriptions.
 
 ## 3. Generate Terrain Inputs
 

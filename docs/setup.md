@@ -16,12 +16,6 @@ conda env create -f environment.yml
 conda activate cfd-dataset
 ```
 
-Install `terrain-fetcher` from its separate repository before running input generation:
-
-```bash
-pip install git+https://github.com/souravsud/terrain-fetcher.git@main
-```
-
 Key Python dependencies:
 
 | Package | Purpose |
@@ -33,19 +27,15 @@ Key Python dependencies:
 | `pyyaml` | YAML configuration parsing |
 | `windkit` | Wind resource calculations |
 
-## Submodules
+## Pipeline Packages
 
-Initialise all Git submodules after cloning:
+All pipeline dependencies are installed automatically by `environment.yml` (via pip). The key packages and their Python import names are:
 
-```bash
-git submodule update --init --recursive
-```
+| Package (GitHub) | Import name | Purpose |
+|------------------|-------------|---------|
+| [`terrain-fetcher`](https://github.com/souravsud/terrain-fetcher) | `terrain_fetcher` | Downloads DEMs and roughness rasters |
+| [`terrain_following_mesh_generator`](https://github.com/souravsud/terrain_following_mesh_generator) | `terrain_mesh` | Generates 3D terrain-following meshes |
+| [`ABL_BC_generator`](https://github.com/souravsud/ABL_BC_generator) | `abl_bc_generator` | Creates ABL inlet boundary conditions |
+| [`taskManager`](https://github.com/souravsud/taskManager) | `taskmanager` | Manages OpenFOAM cases and HPC submission |
 
-The submodules provide:
-
-| Submodule | Purpose |
-|-----------|---------|
-| `terrain-fetcher` | Downloads DEMs and roughness rasters |
-| `terrain_following_mesh_generator` | Generates 3D terrain-following meshes |
-| `ABL_BC_generator` | Creates ABL inlet boundary conditions |
-| `taskManager` | Manages OpenFOAM cases and HPC submission |
+Running `conda env create -f environment.yml` installs all of the above.
